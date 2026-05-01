@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Marketplace — 物件一覧</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); letter-spacing: -0.02em; }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+  .側-見出し { font-size: var(--文字-XS); color: var(--色-墨-淡); margin: var(--余白-5) 0 var(--余白-2) var(--余白-3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); }
+  .頁-上 { margin-bottom: var(--余白-5); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: var(--余白-1); }
+
+  .AI枠 {
+    background: linear-gradient(135deg, var(--色-珊瑚-極淡) 0%, var(--色-紙-純白) 100%);
+    border: 1px solid var(--色-珊瑚-淡);
+    border-radius: var(--角-LG);
+    padding: var(--余白-5);
+    margin-bottom: var(--余白-6);
+    display: flex; gap: var(--余白-5); align-items: center;
+  }
+  .AI印 { width: 48px; height: 48px; color: var(--色-珊瑚-本体); flex-shrink: 0; }
+  .AI題 { font-family: var(--書体-見出し); font-size: var(--文字-XL); margin-bottom: 4px; }
+  .AI本 { color: var(--色-墨-中); font-size: var(--文字-SM); line-height: var(--行間-広); }
+
+  .絞込 { display: flex; gap: var(--余白-3); margin-bottom: var(--余白-5); flex-wrap: wrap; }
+
+  .格 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--余白-5);
+  }
+  .物 {
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    overflow: hidden;
+    transition: all var(--速-標準);
+    cursor: pointer;
+  }
+  .物:hover { transform: translateY(-2px); box-shadow: var(--影-3); border-color: var(--色-珊瑚-淡); }
+  .物-図 { aspect-ratio: 16/10; background: var(--色-紙-くすみ); position: relative; display: flex; align-items: center; justify-content: center; color: var(--色-墨-極淡); font-family: var(--書体-見出し); font-size: var(--文字-LG); }
+  .物-推 { position: absolute; top: 12px; left: 12px; background: var(--色-珊瑚-本体); color: var(--色-紙-純白); padding: 4px 10px; border-radius: var(--角-丸); font-size: var(--文字-XS); font-weight: 500; }
+  .物-本 { padding: var(--余白-4); }
+  .物-題 { font-family: var(--書体-見出し); font-size: var(--文字-LG); margin-bottom: 4px; }
+  .物-場 { color: var(--色-墨-淡); font-size: var(--文字-XS); margin-bottom: var(--余白-3); }
+  .物-値 { font-family: var(--書体-数字); font-size: var(--文字-XL); font-weight: 500; color: var(--色-墨-本体); }
+  .物-諸 { display: flex; gap: var(--余白-3); margin-top: var(--余白-3); padding-top: var(--余白-3); border-top: 1px solid var(--色-紙-くすみ); font-size: var(--文字-XS); color: var(--色-墨-中); }
+  .物-諸 span { display: flex; align-items: center; gap: 4px; }
+
+  .ミニグラフ { height: 32px; margin-top: var(--余白-3); display: flex; align-items: end; gap: 2px; }
+  .ミニグラフ div { flex: 1; background: var(--色-珊瑚-淡); border-radius: 2px 2px 0 0; }
+  .ミニグラフ div.今 { background: var(--色-珊瑚-本体); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>マーケットプレス</div>
+  <div class="側-見出し">マーケット内</div>
+  <div class="側-項目">物件一覧</div>
+  <div class="側-項目">提案カード</div>
+  <div class="側-項目">共有ボード</div>
+  <div class="側-項目">取引履歴</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div class="頁-見出し">マーケットプレス</div>
+    <div class="頁-注">提携 4,820 物件 — あなたの担当顧客に合わせて並び替えされています</div>
+  </div>
+
+  <div class="AI枠">
+    <svg class="AI印" viewBox="0 0 64 64" fill="currentColor">
+      <g transform="translate(32 32)"><rect x="-2" y="-30" width="4" height="22" rx="2"/><g transform="rotate(45)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g><g transform="rotate(90)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g><g transform="rotate(135)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g></g>
+    </svg>
+    <div style="flex: 1;">
+      <div class="AI題">山田太郎様への推薦 3物件が更新されました</div>
+      <div class="AI本">奥様の動線懸念に対応した「東向き・LDK直結間取」優先で抽出。価格帯 ¥45M〜¥48M、徒歩7分以内、3LDK以上。</div>
+    </div>
+    <button class="btn btn-アクセント">提案カードを作成</button>
+  </div>
+
+  <div class="絞込">
+    <button class="btn btn-線">エリア: 中野区</button>
+    <button class="btn btn-線">価格: ¥40M-¥50M</button>
+    <button class="btn btn-線">間取: 3LDK以上</button>
+    <button class="btn btn-線">＋ 条件追加</button>
+  </div>
+
+  <div class="格">
+    <div class="物">
+      <div class="物-図">中野ザ・タワー 25F<div class="物-推">AI推薦 #1</div></div>
+      <div class="物-本">
+        <div class="物-題">中野ザ・タワー</div>
+        <div class="物-場">東京都中野区中央 ・ JR中野駅 徒歩5分</div>
+        <div class="物-値">¥48,000,000</div>
+        <div class="物-諸">
+          <span>3LDK</span><span>・</span><span>78.4㎡</span><span>・</span><span>築6年</span>
+        </div>
+        <div class="ミニグラフ">
+          <div style="height: 40%"></div><div style="height: 50%"></div><div style="height: 55%"></div><div style="height: 70%"></div><div style="height: 80%"></div><div class="今" style="height: 100%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="物">
+      <div class="物-図">パークタワー中野<div class="物-推">AI推薦 #2</div></div>
+      <div class="物-本">
+        <div class="物-題">パークタワー中野</div>
+        <div class="物-場">東京都中野区本町 ・ 東京メトロ新中野駅 徒歩6分</div>
+        <div class="物-値">¥46,500,000</div>
+        <div class="物-諸">
+          <span>3LDK</span><span>・</span><span>72.1㎡</span><span>・</span><span>築4年</span>
+        </div>
+        <div class="ミニグラフ">
+          <div style="height: 50%"></div><div style="height: 55%"></div><div style="height: 60%"></div><div style="height: 65%"></div><div style="height: 75%"></div><div class="今" style="height: 90%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="物">
+      <div class="物-図">ザ・パームス杉並<div class="物-推">AI推薦 #3</div></div>
+      <div class="物-本">
+        <div class="物-題">ザ・パームス杉並高円寺</div>
+        <div class="物-場">東京都杉並区高円寺南 ・ JR高円寺駅 徒歩7分</div>
+        <div class="物-値">¥45,800,000</div>
+        <div class="物-諸">
+          <span>3LDK</span><span>・</span><span>74.8㎡</span><span>・</span><span>築5年</span>
+        </div>
+        <div class="ミニグラフ">
+          <div style="height: 60%"></div><div style="height: 65%"></div><div style="height: 60%"></div><div style="height: 70%"></div><div style="height: 75%"></div><div class="今" style="height: 80%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="物">
+      <div class="物-図">中野ヒルズ</div>
+      <div class="物-本">
+        <div class="物-題">中野ヒルズレジデンス</div>
+        <div class="物-場">東京都中野区東中野 ・ JR東中野駅 徒歩8分</div>
+        <div class="物-値">¥52,000,000</div>
+        <div class="物-諸"><span>3LDK</span><span>・</span><span>82.3㎡</span><span>・</span><span>築8年</span></div>
+        <div class="ミニグラフ"><div style="height: 70%"></div><div style="height: 70%"></div><div style="height: 65%"></div><div style="height: 60%"></div><div style="height: 60%"></div><div class="今" style="height: 65%"></div></div>
+      </div>
+    </div>
+
+    <div class="物">
+      <div class="物-図">プラウド中野</div>
+      <div class="物-本">
+        <div class="物-題">プラウド中野新井</div>
+        <div class="物-場">東京都中野区新井 ・ JR中野駅 徒歩10分</div>
+        <div class="物-値">¥44,000,000</div>
+        <div class="物-諸"><span>3LDK</span><span>・</span><span>71.0㎡</span><span>・</span><span>築7年</span></div>
+        <div class="ミニグラフ"><div style="height: 50%"></div><div style="height: 55%"></div><div style="height: 50%"></div><div style="height: 60%"></div><div style="height: 65%"></div><div class="今" style="height: 70%"></div></div>
+      </div>
+    </div>
+
+    <div class="物">
+      <div class="物-図">アトラス中野坂上</div>
+      <div class="物-本">
+        <div class="物-題">アトラス中野坂上</div>
+        <div class="物-場">東京都中野区中央 ・ 東京メトロ中野坂上駅 徒歩4分</div>
+        <div class="物-値">¥49,500,000</div>
+        <div class="物-諸"><span>3LDK</span><span>・</span><span>76.5㎡</span><span>・</span><span>築3年</span></div>
+        <div class="ミニグラフ"><div style="height: 55%"></div><div style="height: 65%"></div><div style="height: 70%"></div><div style="height: 80%"></div><div style="height: 85%"></div><div class="今" style="height: 95%"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

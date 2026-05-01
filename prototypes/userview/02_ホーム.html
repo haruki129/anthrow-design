@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ UserView — ホーム</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+
+  /* サイドバー */
+  .側 {
+    width: var(--幅-サイドバー);
+    background: var(--色-紙-基調);
+    border-right: 1px solid var(--色-紙-淡墨);
+    padding: var(--余白-5);
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .側-ロゴ {
+    font-family: var(--書体-見出し);
+    font-size: var(--文字-2XL);
+    margin-bottom: var(--余白-6);
+    letter-spacing: -0.02em;
+  }
+  .側-項目 {
+    display: flex; align-items: center; gap: var(--余白-3);
+    padding: 10px 12px;
+    color: var(--色-墨-中);
+    border-radius: var(--角-MD);
+    cursor: pointer;
+    font-size: var(--文字-SM);
+    transition: background var(--速-標準);
+  }
+  .側-項目:hover { background: var(--色-紙-くすみ); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+  .側-見出し {
+    font-size: var(--文字-XS);
+    color: var(--色-墨-淡);
+    margin: var(--余白-5) 0 var(--余白-2) var(--余白-3);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .側-履歴 {
+    padding: 8px 12px;
+    color: var(--色-墨-中);
+    font-size: var(--文字-SM);
+    cursor: pointer; border-radius: var(--角-SM);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .側-履歴:hover { background: var(--色-紙-くすみ); }
+
+  .側-下 { margin-top: auto; display: flex; align-items: center; gap: var(--余白-3); padding-top: var(--余白-4); border-top: 1px solid var(--色-紙-淡墨); }
+  .側-アバター {
+    width: 32px; height: 32px; border-radius: var(--角-丸);
+    background: var(--色-珊瑚-淡); color: var(--色-珊瑚-濃);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500; font-size: var(--文字-SM);
+  }
+
+  /* メイン */
+  .主 {
+    flex: 1;
+    display: flex; flex-direction: column;
+    background: var(--色-紙-純白);
+  }
+  .主-上 {
+    height: var(--高-ヘッダー);
+    border-bottom: 1px solid var(--色-紙-淡墨);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--余白-5);
+  }
+  .主-上-中央 {
+    text-align: center;
+  }
+  .主-上-モデル { font-family: var(--書体-見出し); font-size: var(--文字-LG); }
+  .主-上-モード { font-size: var(--文字-XS); color: var(--色-墨-淡); }
+  .主-上-丸 {
+    width: 36px; height: 36px; border-radius: var(--角-丸);
+    background: var(--色-紙-くすみ);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+
+  /* 中央エリア */
+  .中央 {
+    flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 0 var(--余白-5);
+  }
+  .印 {
+    width: 56px; height: 56px;
+    color: var(--色-珊瑚-本体);
+    margin-bottom: var(--余白-4);
+  }
+  .挨拶 {
+    font-family: var(--書体-見出し);
+    font-size: var(--文字-2XL);
+    color: var(--色-墨-本体);
+    text-align: center;
+    max-width: 560px;
+    line-height: var(--行間-密);
+  }
+  .候補-列 {
+    display: flex; gap: var(--余白-3); margin-top: var(--余白-6);
+    flex-wrap: wrap; justify-content: center;
+    max-width: 720px;
+  }
+  .候補 {
+    padding: 10px 18px;
+    background: var(--色-紙-基調);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-丸);
+    font-size: var(--文字-SM);
+    color: var(--色-墨-中);
+    cursor: pointer;
+    transition: all var(--速-標準);
+  }
+  .候補:hover { border-color: var(--色-珊瑚-本体); color: var(--色-珊瑚-濃); }
+
+  /* 入力エリア */
+  .入力箱 {
+    margin: 0 auto var(--余白-6);
+    width: 100%; max-width: 720px;
+    padding: 0 var(--余白-5);
+  }
+  .入力包 {
+    display: flex; align-items: center;
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    box-shadow: var(--影-2);
+    padding: var(--余白-3) var(--余白-4);
+    gap: var(--余白-3);
+    transition: border-color var(--速-標準);
+  }
+  .入力包:focus-within { border-color: var(--色-墨-中); }
+  .入力包 input {
+    flex: 1; border: none; outline: none;
+    font-family: var(--書体-本文); font-size: var(--文字-MD);
+    background: transparent; color: var(--色-墨-本体);
+  }
+  .入力-丸 {
+    width: 32px; height: 32px; border-radius: var(--角-丸);
+    display: flex; align-items: center; justify-content: center;
+    background: var(--色-紙-基調); cursor: pointer;
+    color: var(--色-墨-中);
+  }
+  .入力-丸.黒 { background: var(--色-墨-本体); color: var(--色-紙-純白); }
+
+  /* スターアイコン */
+  .star { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+
+  <div class="側-項目 選択">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    対話
+  </div>
+  <div class="側-項目">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 12l8 4 8-4"/><path d="M4 17l8 4 8-4"/></svg>
+    顧客
+  </div>
+  <div class="側-項目">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>
+    案件
+  </div>
+  <div class="側-項目">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    承認
+  </div>
+  <div class="側-項目">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+    マーケットプレス
+  </div>
+
+  <div class="側-見出し">最近の対話</div>
+  <div class="側-履歴">山田様 タワーマンション提案</div>
+  <div class="側-履歴">中野エリア 投資物件3本比較</div>
+  <div class="側-履歴">承認依頼: 値引き5%稟議</div>
+  <div class="側-履歴">月次パイプライン整理</div>
+  <div class="側-履歴">新規問合せ自動振分けルール</div>
+
+  <div class="側-下">
+    <div class="側-アバター">樋</div>
+    <div>
+      <div style="font-size: var(--文字-SM); font-weight: 500;">樋口</div>
+      <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">不動産営業</div>
+    </div>
+  </div>
+</aside>
+
+<main class="主">
+  <div class="主-上">
+    <div class="主-上-丸">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </div>
+    <div class="主-上-中央">
+      <div class="主-上-モデル">アンソロウ 4.7 ▾</div>
+      <div class="主-上-モード">アダプティブ</div>
+    </div>
+    <div class="主-上-丸">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1"/><circle cx="15" cy="10" r="1"/><path d="M9 16q3 -2 6 0"/></svg>
+    </div>
+  </div>
+
+  <div class="中央">
+    <div class="印">
+      <svg class="star" viewBox="0 0 64 64" fill="currentColor">
+        <g transform="translate(32 32)">
+          <g><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+          <g transform="rotate(45)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+          <g transform="rotate(90)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+          <g transform="rotate(135)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+          <g transform="rotate(22.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+          <g transform="rotate(67.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+          <g transform="rotate(112.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+          <g transform="rotate(157.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+        </g>
+      </svg>
+    </div>
+    <div class="挨拶">おはようございます、樋口さん。<br>本日はどの業務から始めましょうか。</div>
+    <div class="候補-列">
+      <div class="候補">明日の山田様アポ資料を3本作成</div>
+      <div class="候補">中野駅徒歩7分以内の新着物件</div>
+      <div class="候補">承認待ち稟議を確認</div>
+      <div class="候補">今月の見込み顧客を整理</div>
+    </div>
+  </div>
+
+  <div class="入力箱">
+    <div class="入力包">
+      <div class="入力-丸">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </div>
+      <input placeholder="アンソロウとチャット" />
+      <div class="入力-丸">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+      </div>
+      <div class="入力-丸 黒">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><rect x="3" y="9" width="2" height="6"/><rect x="7" y="6" width="2" height="12"/><rect x="11" y="3" width="2" height="18"/><rect x="15" y="6" width="2" height="12"/><rect x="19" y="9" width="2" height="6"/></svg>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

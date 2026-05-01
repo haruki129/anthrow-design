@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Dashboard — 案件パイプライン</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+  .側-見出し { font-size: var(--文字-XS); color: var(--色-墨-淡); margin: var(--余白-5) 0 var(--余白-2) var(--余白-3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); overflow-x: auto; }
+  .頁-上 { display: flex; justify-content: space-between; align-items: end; margin-bottom: var(--余白-6); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: 4px; }
+
+  .カンバン {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(260px, 1fr));
+    gap: var(--余白-4);
+  }
+  .列 { background: var(--色-紙-くすみ); border-radius: var(--角-LG); padding: var(--余白-4); min-height: 600px; }
+  .列-頭 { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--余白-3); padding-bottom: var(--余白-3); border-bottom: 1px solid var(--色-紙-淡墨); }
+  .列-題 { font-family: var(--書体-見出し); font-size: var(--文字-LG); }
+  .列-数 { background: var(--色-紙-純白); padding: 2px 10px; border-radius: var(--角-丸); font-size: var(--文字-XS); font-weight: 500; color: var(--色-墨-中); }
+
+  .札 {
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-MD);
+    padding: var(--余白-3);
+    margin-bottom: var(--余白-3);
+    cursor: grab;
+    transition: all var(--速-標準);
+  }
+  .札:hover { box-shadow: var(--影-2); transform: translateY(-1px); }
+  .札-題 { font-weight: 500; font-size: var(--文字-SM); margin-bottom: 4px; }
+  .札-顧 { color: var(--色-墨-淡); font-size: var(--文字-XS); margin-bottom: var(--余白-2); }
+  .札-値 { font-family: var(--書体-数字); font-size: var(--文字-SM); font-weight: 500; }
+  .札-下 { display: flex; justify-content: space-between; align-items: center; margin-top: var(--余白-2); padding-top: var(--余白-2); border-top: 1px solid var(--色-紙-くすみ); font-size: var(--文字-XS); color: var(--色-墨-淡); }
+  .札-丸 { width: 20px; height: 20px; border-radius: var(--角-丸); background: var(--色-珊瑚-淡); color: var(--色-珊瑚-濃); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 500; }
+
+  .札.警告 { border-left: 3px solid var(--色-警告); }
+  .札.危険 { border-left: 3px solid var(--色-危険); }
+  .札.成功 { border-left: 3px solid var(--色-成功); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目">ダッシュボード</div>
+  <div class="側-見出し">分析</div>
+  <div class="側-項目">KPIサマリー</div>
+  <div class="側-項目 選択">パイプライン</div>
+  <div class="側-項目">エリア別分析</div>
+  <div class="側-見出し">運用</div>
+  <div class="側-項目">承認センター</div>
+  <div class="側-項目">バージョン履歴</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div>
+      <div class="頁-見出し">案件パイプライン</div>
+      <div class="頁-注">全 42 案件 ・ 想定総額 ¥1,820M ・ 加重期待値 ¥684M</div>
+    </div>
+    <div style="display: flex; gap: var(--余白-3);">
+      <button class="btn btn-線">担当: 全員 ▾</button>
+      <button class="btn btn-線">エリア: 全て ▾</button>
+      <button class="btn btn-アクセント">＋ 案件追加</button>
+    </div>
+  </div>
+
+  <div class="カンバン">
+    <div class="列">
+      <div class="列-頭"><div class="列-題">初回面談</div><div class="列-数">8</div></div>
+      <div class="札">
+        <div class="札-題">高橋由紀様 中野エリア</div>
+        <div class="札-顧">担当: 樋口 ・ ¥35M帯</div>
+        <div class="札-値">想定 ¥35,000,000</div>
+        <div class="札-下"><div class="札-丸">高</div><span>4/27</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">斉藤様 杉並エリア</div>
+        <div class="札-顧">担当: 高橋 ・ ¥42M帯</div>
+        <div class="札-値">想定 ¥42,000,000</div>
+        <div class="札-下"><div class="札-丸">斉</div><span>4/26</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">小林様 投資相談</div>
+        <div class="札-顧">担当: 佐々木 ・ ¥80M帯</div>
+        <div class="札-値">想定 ¥80,000,000</div>
+        <div class="札-下"><div class="札-丸">小</div><span>4/25</span></div>
+      </div>
+    </div>
+
+    <div class="列">
+      <div class="列-頭"><div class="列-題">提案準備</div><div class="列-数">12</div></div>
+      <div class="札">
+        <div class="札-題">佐藤美咲様 世田谷</div>
+        <div class="札-顧">担当: 樋口 ・ ¥72M帯</div>
+        <div class="札-値">想定 ¥72,000,000</div>
+        <div class="札-下"><div class="札-丸">佐</div><span>昨日</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">吉田様 港区投資</div>
+        <div class="札-顧">担当: 高橋 ・ ¥110M帯</div>
+        <div class="札-値">想定 ¥110,000,000</div>
+        <div class="札-下"><div class="札-丸">吉</div><span>4/28</span></div>
+      </div>
+    </div>
+
+    <div class="列">
+      <div class="列-頭"><div class="列-題">商談中</div><div class="列-数">14</div></div>
+      <div class="札 成功">
+        <div class="札-題">山田太郎様 中野タワー</div>
+        <div class="札-顧">担当: 樋口 ・ ¥48M帯</div>
+        <div class="札-値">想定 ¥48,000,000</div>
+        <div class="札-下"><div class="札-丸">山</div><span>本日</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">中島様 新宿1LDK</div>
+        <div class="札-顧">担当: 鈴木 ・ ¥38M帯</div>
+        <div class="札-値">想定 ¥38,000,000</div>
+        <div class="札-下"><div class="札-丸">中</div><span>4/29</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">青木様 投資物件</div>
+        <div class="札-顧">担当: 佐々木 ・ ¥150M帯</div>
+        <div class="札-値">想定 ¥150,000,000</div>
+        <div class="札-下"><div class="札-丸">青</div><span>4/27</span></div>
+      </div>
+    </div>
+
+    <div class="列">
+      <div class="列-頭"><div class="列-題">承認・契約</div><div class="列-数">5</div></div>
+      <div class="札 警告">
+        <div class="札-題">田中健一様 港区投資</div>
+        <div class="札-顧">担当: 樋口 ・ 承認待ち</div>
+        <div class="札-値">想定 ¥126,000,000</div>
+        <div class="札-下"><div class="札-丸">田</div><span class="tag tag-警告" style="font-size: 10px;">承認待</span></div>
+      </div>
+      <div class="札">
+        <div class="札-題">伊藤様 千代田 投資</div>
+        <div class="札-顧">担当: 高橋 ・ 契約書作成</div>
+        <div class="札-値">想定 ¥98,000,000</div>
+        <div class="札-下"><div class="札-丸">伊</div><span>4/29</span></div>
+      </div>
+    </div>
+
+    <div class="列">
+      <div class="列-頭"><div class="列-題">成約</div><div class="列-数">3</div></div>
+      <div class="札 成功">
+        <div class="札-題">渡辺浩二様 新宿1LDK</div>
+        <div class="札-顧">担当: 樋口 ・ 完了</div>
+        <div class="札-値">¥58,000,000</div>
+        <div class="札-下"><div class="札-丸">渡</div><span class="tag tag-成功" style="font-size: 10px;">成約</span></div>
+      </div>
+      <div class="札 成功">
+        <div class="札-題">林様 文京区戸建</div>
+        <div class="札-顧">担当: 中島 ・ 完了</div>
+        <div class="札-値">¥84,000,000</div>
+        <div class="札-下"><div class="札-丸">林</div><span class="tag tag-成功" style="font-size: 10px;">成約</span></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

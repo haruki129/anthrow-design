@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Marketplace — 提案カード生成</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; display: grid; grid-template-columns: 1fr 380px; }
+  .中 { padding: var(--余白-6) var(--余白-7); overflow-y: auto; }
+  .右 { background: var(--色-紙-くすみ); padding: var(--余白-6) var(--余白-5); border-left: 1px solid var(--色-紙-淡墨); }
+
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); margin-bottom: var(--余白-2); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-bottom: var(--余白-5); }
+
+  .工程 { display: flex; gap: var(--余白-3); margin-bottom: var(--余白-6); }
+  .段 { flex: 1; padding: var(--余白-3) var(--余白-4); background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); }
+  .段.今 { border-color: var(--色-珊瑚-本体); background: var(--色-珊瑚-極淡); }
+  .段-番 { font-size: var(--文字-XS); color: var(--色-墨-淡); }
+  .段-題 { font-weight: 500; margin-top: 4px; }
+
+  .比較 {
+    background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG);
+    overflow: hidden;
+  }
+  .比較 table { width: 100%; border-collapse: collapse; }
+  .比較 th, .比較 td { padding: var(--余白-3) var(--余白-4); text-align: left; border-bottom: 1px solid var(--色-紙-くすみ); font-size: var(--文字-SM); }
+  .比較 th { background: var(--色-紙-基調); color: var(--色-墨-淡); font-weight: 500; font-size: var(--文字-XS); text-transform: uppercase; letter-spacing: 0.05em; }
+  .比較 td.推 { background: var(--色-珊瑚-極淡); font-weight: 500; }
+  .比較 .金 { font-family: var(--書体-数字); }
+
+  .追加枠 { background: var(--色-紙-純白); border: 2px dashed var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-5); text-align: center; color: var(--色-墨-淡); cursor: pointer; }
+  .追加枠:hover { border-color: var(--色-珊瑚-本体); color: var(--色-珊瑚-濃); }
+
+  .右-見出し { font-family: var(--書体-見出し); font-size: var(--文字-LG); margin-bottom: var(--余白-3); }
+  .顧プロ { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-4); margin-bottom: var(--余白-4); }
+  .顧プロ-行 { display: flex; align-items: center; gap: var(--余白-3); margin-bottom: var(--余白-3); padding-bottom: var(--余白-3); border-bottom: 1px solid var(--色-紙-くすみ); }
+  .顧プロ-行:last-child { border: 0; padding: 0; margin: 0; }
+  .丸顔 { width: 36px; height: 36px; border-radius: var(--角-丸); background: var(--色-珊瑚-淡); color: var(--色-珊瑚-濃); display: flex; align-items: center; justify-content: center; font-weight: 500; }
+
+  .AIメモ { background: linear-gradient(135deg, var(--色-珊瑚-極淡), var(--色-紙-純白)); border: 1px solid var(--色-珊瑚-淡); border-radius: var(--角-MD); padding: var(--余白-4); font-size: var(--文字-SM); line-height: var(--行間-広); margin-bottom: var(--余白-4); }
+  .AIメモ strong { display: block; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>マーケットプレス</div>
+</aside>
+
+<main class="主">
+  <div class="中">
+    <div class="頁-見出し">提案カード生成</div>
+    <div class="頁-注">山田太郎様 向け ・ 物件3つを比較表化してPDF/共有URLで送付できます</div>
+
+    <div class="工程">
+      <div class="段"><div class="段-番">1</div><div class="段-題">顧客選択 ✓</div></div>
+      <div class="段 今"><div class="段-番">2</div><div class="段-題">物件編集</div></div>
+      <div class="段"><div class="段-番">3</div><div class="段-題">AI比較生成</div></div>
+      <div class="段"><div class="段-番">4</div><div class="段-題">承認・送付</div></div>
+    </div>
+
+    <h3 style="margin-bottom: var(--余白-3);">選択中の物件（3 / 5）</h3>
+    <div class="比較">
+      <table>
+        <thead>
+          <tr>
+            <th>項目</th>
+            <th>中野ザ・タワー</th>
+            <th>パークタワー中野</th>
+            <th>ザ・パームス杉並</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>価格</td><td class="金 推">¥48,000,000</td><td class="金">¥46,500,000</td><td class="金">¥45,800,000</td></tr>
+          <tr><td>専有面積</td><td>78.4㎡</td><td>72.1㎡</td><td class="推">74.8㎡</td></tr>
+          <tr><td>駅徒歩</td><td class="推">5分</td><td>6分</td><td>7分</td></tr>
+          <tr><td>築年</td><td>6年</td><td class="推">4年</td><td>5年</td></tr>
+          <tr><td>向き</td><td class="推">東向き</td><td>南西</td><td>南</td></tr>
+          <tr><td>5年後予測</td><td class="金 推" style="color: var(--色-成功);">+6.7%</td><td class="金" style="color: var(--色-成功);">+5.2%</td><td class="金" style="color: var(--色-成功);">+4.1%</td></tr>
+          <tr><td>学区評価</td><td class="推">A</td><td>B</td><td>B</td></tr>
+          <tr><td>AIスコア</td><td class="推" style="font-weight: 600;">92</td><td>87</td><td>81</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: var(--余白-4);">
+      <div class="追加枠">＋ 物件をドラッグして追加（最大5物件）</div>
+    </div>
+
+    <div style="margin-top: var(--余白-6); display: flex; gap: var(--余白-3);">
+      <button class="btn btn-線">下書き保存</button>
+      <button class="btn btn-線">プレビュー</button>
+      <button class="btn btn-アクセント" style="margin-left: auto;">承認に提出 →</button>
+    </div>
+  </div>
+
+  <aside class="右">
+    <div class="右-見出し">提案先</div>
+    <div class="顧プロ">
+      <div class="顧プロ-行">
+        <div class="丸顔">山</div>
+        <div>
+          <div style="font-weight: 500;">山田 太郎 様</div>
+          <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">予算 ¥48M / 3LDK / 中野</div>
+        </div>
+      </div>
+      <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">
+        最終接触: 本日 10:32<br>
+        次アクション: 東向き比較を本日中に
+      </div>
+    </div>
+
+    <div class="AIメモ">
+      <strong>アンソロウAI解析</strong>
+      山田様の意思決定要因（過去対話分析）:<br>
+      ① 学区A評価 — 重要度 92%<br>
+      ② 駅近5分以内 — 重要度 88%<br>
+      ③ 東向き／LDK動線 — 重要度 85%<br>
+      → 中野ザ・タワーがすべての軸で優位。比較表で「中野ザ・タワー推奨」を明示する構成を推奨。
+    </div>
+
+    <div class="右-見出し">提案テンプレート</div>
+    <button class="btn btn-線" style="width: 100%; margin-bottom: var(--余白-2);">📊 比較表型（3-5物件）</button>
+    <button class="btn btn-線" style="width: 100%; margin-bottom: var(--余白-2);">📈 投資シミュレーション型</button>
+    <button class="btn btn-線" style="width: 100%; margin-bottom: var(--余白-2);">🏡 ライフスタイル提案型</button>
+  </aside>
+</main>
+
+</body>
+</html>

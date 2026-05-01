@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ デザインベース v0.1 — 一覧</title>
+<link rel="stylesheet" href="design-system/tokens.css">
+<style>
+  body { padding: var(--余白-7); max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: var(--文字-4XL); margin-bottom: var(--余白-2); }
+  .副 { color: var(--色-墨-淡); margin-bottom: var(--余白-7); font-size: var(--文字-LG); }
+  .段 { margin-bottom: var(--余白-7); }
+  .段-題 { font-family: var(--書体-見出し); font-size: var(--文字-2XL); padding-bottom: var(--余白-3); border-bottom: 1px solid var(--色-紙-淡墨); margin-bottom: var(--余白-4); display: flex; align-items: end; gap: var(--余白-3); }
+  .段-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-bottom: 0; }
+
+  .一覧 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--余白-4); }
+  .項 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); padding: var(--余白-5); transition: all var(--速-標準); cursor: pointer; text-decoration: none; color: inherit; display: block; }
+  .項:hover { border-color: var(--色-珊瑚-本体); box-shadow: var(--影-2); transform: translateY(-1px); }
+  .項-番 { font-family: var(--書体-数字); color: var(--色-墨-淡); font-size: var(--文字-XS); }
+  .項-題 { font-family: var(--書体-見出し); font-size: var(--文字-LG); margin-top: 4px; }
+  .項-本 { color: var(--色-墨-中); font-size: var(--文字-SM); margin-top: var(--余白-2); line-height: var(--行間-広); }
+
+  .ヘッダー印 { width: 64px; height: 64px; color: var(--色-珊瑚-本体); margin-bottom: var(--余白-4); }
+</style>
+</head>
+<body>
+
+<svg class="ヘッダー印" viewBox="0 0 64 64" fill="currentColor">
+  <g transform="translate(32 32)">
+    <rect x="-2" y="-30" width="4" height="22" rx="2"/>
+    <g transform="rotate(45)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+    <g transform="rotate(90)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+    <g transform="rotate(135)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+    <g transform="rotate(22.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+    <g transform="rotate(67.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+    <g transform="rotate(112.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+    <g transform="rotate(157.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+  </g>
+</svg>
+
+<h1>アンソロウ デザインベース</h1>
+<div class="副">v0.1 ・ Anthropic Claude 準拠 ・ 業務SaaS / 不動産現場最適化</div>
+
+<div class="段">
+  <div class="段-題">UserView APP <span class="段-注">— 営業担当者の日常面（5画面）</span></div>
+  <div class="一覧">
+    <a class="項" href="prototypes/userview/01_ログイン.html"><div class="項-番">UV-01</div><div class="項-題">ログイン</div><div class="項-本">静かな入口。SSO（Google/Microsoft）対応。</div></a>
+    <a class="項" href="prototypes/userview/02_ホーム.html"><div class="項-番">UV-02</div><div class="項-題">ホーム（対話）</div><div class="項-本">「おはようございます」から始まるClaude風の業務入口。</div></a>
+    <a class="項" href="prototypes/userview/03_顧客一覧.html"><div class="項-番">UV-03</div><div class="項-題">顧客一覧</div><div class="項-本">担当顧客の検索・絞込・並び替え。</div></a>
+    <a class="項" href="prototypes/userview/04_顧客詳細.html"><div class="項-番">UV-04</div><div class="項-題">顧客詳細＋タイムライン</div><div class="項-本">時系列で一望。AIが次の一手を右側に提示。</div></a>
+    <a class="項" href="prototypes/userview/05_提案承認.html"><div class="項-番">UV-05</div><div class="項-題">提案承認</div><div class="項-本">変更前後の差分を必ず表示。差し戻し／改善／承認の3択。</div></a>
+  </div>
+</div>
+
+<div class="段">
+  <div class="段-題">Marketplace APP <span class="段-注">— 物件・提案の生成場（4画面）</span></div>
+  <div class="一覧">
+    <a class="項" href="prototypes/marketplace/01_物件一覧.html"><div class="項-番">MP-01</div><div class="項-題">物件一覧</div><div class="項-本">AI推薦枠＋カードビュー＋将来推移ミニグラフ。</div></a>
+    <a class="項" href="prototypes/marketplace/02_物件詳細.html"><div class="項-番">MP-02</div><div class="項-題">物件詳細</div><div class="項-本">スペック・予測・周辺環境。資産価値曲線で意思決定支援。</div></a>
+    <a class="項" href="prototypes/marketplace/03_提案カード生成.html"><div class="項-番">MP-03</div><div class="項-題">提案カード生成</div><div class="項-本">3-5物件をAIが比較表化。顧客プロファイル連携。</div></a>
+    <a class="項" href="prototypes/marketplace/04_共有ボード.html"><div class="項-番">MP-04</div><div class="項-題">共有ボード</div><div class="項-本">顧客側からも閲覧可能。◎○△の双方向反応で意思を可視化。</div></a>
+  </div>
+</div>
+
+<div class="段">
+  <div class="段-題">Dashboard APP <span class="段-注">— 管理・俯瞰の場（4画面）</span></div>
+  <div class="一覧">
+    <a class="項" href="prototypes/dashboard/01_KPI.html"><div class="項-番">DB-01</div><div class="項-題">KPIサマリー</div><div class="項-本">月次推移・担当者順位・エリア分布・AI洞察。</div></a>
+    <a class="項" href="prototypes/dashboard/02_パイプライン.html"><div class="項-番">DB-02</div><div class="項-題">案件パイプライン</div><div class="項-本">5ステージのカンバン。加重期待値で見込み管理。</div></a>
+    <a class="項" href="prototypes/dashboard/03_承認.html"><div class="項-番">DB-03</div><div class="項-題">承認センター</div><div class="項-本">低リスクは自動化。差分・粗利・緊急度で判断支援。</div></a>
+    <a class="項" href="prototypes/dashboard/04_バージョン履歴.html"><div class="項-番">DB-04</div><div class="項-題">バージョン履歴</div><div class="項-本">3版保存・即復元。承認フロー厳守原則を可視化。</div></a>
+  </div>
+</div>
+
+<div class="段">
+  <div class="段-題">設計ドキュメント</div>
+  <div class="一覧">
+    <a class="項" href="design-system/アンソロウ_デザインシステム_v0.1.md"><div class="項-番">DS</div><div class="項-題">デザインシステム v0.1</div><div class="項-本">カラー・タイポ・余白・コンポーネント原則。</div></a>
+    <a class="項" href="specs/UserView_仕様書_v0.1.md"><div class="項-番">SPEC</div><div class="項-題">UserView 仕様書</div><div class="項-本">画面・API・改善候補。</div></a>
+    <a class="項" href="specs/Marketplace_仕様書_v0.1.md"><div class="項-番">SPEC</div><div class="項-題">Marketplace 仕様書</div><div class="項-本">画面・API・改善候補。</div></a>
+    <a class="項" href="specs/Dashboard_仕様書_v0.1.md"><div class="項-番">SPEC</div><div class="項-題">Dashboard 仕様書</div><div class="項-本">画面・API・改善候補。</div></a>
+    <a class="項" href="承認フロー_v0.1.md"><div class="項-番">FLOW</div><div class="項-題">承認フロー雛形</div><div class="項-本">変更→確認→2択→保存／改善。</div></a>
+    <a class="項" href="react/AnthrowApps.jsx"><div class="項-番">CODE</div><div class="項-題">React実装版</div><div class="項-本">3 APP のコンポーネント実装。</div></a>
+  </div>
+</div>
+
+</body>
+</html>

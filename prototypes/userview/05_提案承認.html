@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ UserView — 承認</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); letter-spacing: -0.02em; }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); max-width: 980px; }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); margin-bottom: var(--余白-2); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-bottom: var(--余白-6); }
+
+  .タブ { display: flex; gap: 0; border-bottom: 1px solid var(--色-紙-淡墨); margin-bottom: var(--余白-5); }
+  .タブ-項 { padding: 12px 18px; cursor: pointer; color: var(--色-墨-淡); border-bottom: 2px solid transparent; font-size: var(--文字-SM); }
+  .タブ-項.選択 { color: var(--色-墨-本体); border-bottom-color: var(--色-珊瑚-本体); font-weight: 500; }
+
+  .申請 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); padding: var(--余白-5); margin-bottom: var(--余白-4); }
+  .申請-頭 { display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--余白-4); }
+  .申請-題 { font-family: var(--書体-見出し); font-size: var(--文字-XL); }
+  .申請-下 { color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: 4px; }
+
+  .差分 { display: grid; grid-template-columns: 1fr 24px 1fr; gap: var(--余白-3); margin: var(--余白-4) 0; }
+  .差分-枠 { background: var(--色-紙-基調); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-4); }
+  .差分-名 { font-size: var(--文字-XS); color: var(--色-墨-淡); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--余白-2); }
+  .差分 .前 { color: var(--色-危険); text-decoration: line-through; }
+  .差分 .後 { color: var(--色-成功); font-weight: 500; }
+  .矢 { display: flex; align-items: center; justify-content: center; color: var(--色-墨-淡); }
+
+  .理由 { background: var(--色-珊瑚-極淡); border-left: 3px solid var(--色-珊瑚-本体); padding: var(--余白-4); border-radius: var(--角-SM); margin: var(--余白-4) 0; font-size: var(--文字-SM); line-height: var(--行間-広); }
+
+  .決定 { display: flex; gap: var(--余白-3); justify-content: flex-end; padding-top: var(--余白-4); border-top: 1px solid var(--色-紙-くすみ); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>案件</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>承認</div>
+</aside>
+
+<main class="主">
+  <div class="頁-見出し">承認</div>
+  <div class="頁-注">変更前後を比較し、保存／改善のみ選択できる仕様です。</div>
+
+  <div class="タブ">
+    <div class="タブ-項 選択">受信（あなた宛）<span class="tag" style="margin-left: 8px;">3</span></div>
+    <div class="タブ-項">送信（依頼中）</div>
+    <div class="タブ-項">完了済み</div>
+  </div>
+
+  <div class="申請">
+    <div class="申請-頭">
+      <div>
+        <div class="申請-題">山田太郎様 提案価格 値引き稟議</div>
+        <div class="申請-下">起案: 樋口 / 受領: 部長 中川 / 4月30日 09:14</div>
+      </div>
+      <span class="tag tag-警告">承認待ち</span>
+    </div>
+
+    <div class="差分">
+      <div class="差分-枠">
+        <div class="差分-名">変更前</div>
+        <div class="前" style="font-family: var(--書体-数字); font-size: var(--文字-LG);">¥48,000,000</div>
+        <div style="margin-top: 8px; font-size: var(--文字-XS); color: var(--色-墨-淡);">提示済み定価</div>
+      </div>
+      <div class="矢">→</div>
+      <div class="差分-枠">
+        <div class="差分-名">変更後</div>
+        <div class="後" style="font-family: var(--書体-数字); font-size: var(--文字-LG);">¥45,600,000</div>
+        <div style="margin-top: 8px; font-size: var(--文字-XS); color: var(--色-墨-淡);">5%値引（▲ ¥2,400,000）</div>
+      </div>
+    </div>
+
+    <div class="理由">
+      <strong>申請理由:</strong> 内見後の奥様懸念（リビング動線）に対し、価格調整で意思決定加速を図ります。同条件の渡辺様事例で 4.8% 値引→契約成立の前例あり。粗利は 18.2% 確保され、社内基準（15%以上）を満たします。
+    </div>
+
+    <div class="決定">
+      <button class="btn btn-線">差し戻し（理由必須）</button>
+      <button class="btn btn-線">改善内容を確認</button>
+      <button class="btn btn-アクセント">承認して保存</button>
+    </div>
+  </div>
+
+  <div class="申請">
+    <div class="申請-頭">
+      <div>
+        <div class="申請-題">佐藤美咲様 提案資料の自動生成プロンプト変更</div>
+        <div class="申請-下">起案: アンソロウAI / 受領: 樋口 / 4月30日 08:02</div>
+      </div>
+      <span class="tag tag-情報">AI起案</span>
+    </div>
+
+    <div class="差分">
+      <div class="差分-枠">
+        <div class="差分-名">変更前（v0.1）</div>
+        <div class="前" style="font-size: var(--文字-SM); line-height: var(--行間-広);">「3物件の比較表を作成してください」</div>
+      </div>
+      <div class="矢">→</div>
+      <div class="差分-枠">
+        <div class="差分-名">変更後（v0.2）</div>
+        <div class="後" style="font-size: var(--文字-SM); line-height: var(--行間-広);">「3物件の比較表＋将来資産価値推移＋同類成功顧客プロファイル」</div>
+      </div>
+    </div>
+
+    <div class="理由">
+      <strong>変更根拠:</strong> 過去30件の成約データから「将来資産価値情報」付資料の成約率が +24% であることを検出。佐藤様の関心傾向（投資重視）に最適化。
+    </div>
+
+    <div class="決定">
+      <button class="btn btn-線">差し戻し</button>
+      <button class="btn btn-線">改善内容を確認</button>
+      <button class="btn btn-アクセント">承認して保存</button>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

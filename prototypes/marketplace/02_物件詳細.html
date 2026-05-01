@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Marketplace — 物件詳細</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); max-width: 1100px; }
+  .戻る { color: var(--色-墨-淡); font-size: var(--文字-SM); cursor: pointer; margin-bottom: var(--余白-4); }
+
+  .頭 { display: grid; grid-template-columns: 1.4fr 1fr; gap: var(--余白-6); margin-bottom: var(--余白-7); }
+  .頭-図 { aspect-ratio: 4/3; background: var(--色-紙-くすみ); border-radius: var(--角-LG); display: flex; align-items: center; justify-content: center; color: var(--色-墨-極淡); font-family: var(--書体-見出し); font-size: var(--文字-2XL); }
+  .頭-情 h1 { font-size: var(--文字-3XL); margin-bottom: var(--余白-2); }
+  .頭-場 { color: var(--色-墨-淡); margin-bottom: var(--余白-5); }
+  .頭-値 { font-family: var(--書体-数字); font-size: var(--文字-4XL); font-weight: 500; margin-bottom: var(--余白-2); }
+  .頭-坪 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-bottom: var(--余白-5); }
+  .頭-行 { display: flex; gap: var(--余白-3); margin-bottom: var(--余白-2); }
+
+  .節 { margin-bottom: var(--余白-7); }
+  .節-題 { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-4); padding-bottom: var(--余白-3); border-bottom: 1px solid var(--色-紙-淡墨); }
+
+  .スペック {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    overflow: hidden;
+  }
+  .スペック-行 { display: grid; grid-template-columns: 140px 1fr; padding: var(--余白-4); border-bottom: 1px solid var(--色-紙-くすみ); border-right: 1px solid var(--色-紙-くすみ); font-size: var(--文字-SM); }
+  .スペック-行 .名 { color: var(--色-墨-淡); }
+
+  .予測 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--余白-5); }
+  .予測-図 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); padding: var(--余白-5); }
+
+  /* SVG折れ線グラフ */
+  .グ { width: 100%; height: 240px; }
+  .予測-注 {
+    background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG); padding: var(--余白-5);
+  }
+  .予測-注 .行 { padding: var(--余白-2) 0; border-bottom: 1px solid var(--色-紙-くすみ); display: flex; justify-content: space-between; font-size: var(--文字-SM); }
+  .予測-注 .行:last-child { border: none; }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>マーケットプレス</div>
+</aside>
+
+<main class="主">
+  <div class="戻る">‹ 物件一覧へ戻る</div>
+
+  <div class="頭">
+    <div class="頭-図">中野ザ・タワー 外観</div>
+    <div class="頭-情">
+      <span class="tag">AI推薦 #1 山田様</span>
+      <h1 style="margin-top: var(--余白-3);">中野ザ・タワー 25F</h1>
+      <div class="頭-場">東京都中野区中央 ・ JR中野駅 徒歩5分</div>
+      <div class="頭-値">¥48,000,000</div>
+      <div class="頭-坪">@ ¥612,000/㎡ ・ 利回り 4.8%（参考）</div>
+      <div class="頭-行">
+        <button class="btn btn-アクセント" style="flex: 1;">提案カードに追加</button>
+        <button class="btn btn-線">資料をPDFで出力</button>
+      </div>
+      <div class="頭-行">
+        <button class="btn btn-線" style="flex: 1;">内見予約</button>
+        <button class="btn btn-線" style="flex: 1;">類似物件</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="節">
+    <div class="節-題">基本スペック</div>
+    <div class="スペック">
+      <div class="スペック-行"><div class="名">間取</div><div>3LDK + WIC</div></div>
+      <div class="スペック-行"><div class="名">専有面積</div><div>78.4㎡</div></div>
+      <div class="スペック-行"><div class="名">築年</div><div>2020年（築6年）</div></div>
+      <div class="スペック-行"><div class="名">階数</div><div>25階 / 30階建</div></div>
+      <div class="スペック-行"><div class="名">向き</div><div>東向き</div></div>
+      <div class="スペック-行"><div class="名">バルコニー</div><div>12.6㎡</div></div>
+      <div class="スペック-行"><div class="名">管理費</div><div>¥18,500/月</div></div>
+      <div class="スペック-行"><div class="名">修繕積立金</div><div>¥9,200/月</div></div>
+    </div>
+  </div>
+
+  <div class="節">
+    <div class="節-題">将来資産価値推移</div>
+    <div class="予測">
+      <div class="予測-図">
+        <svg class="グ" viewBox="0 0 600 240" preserveAspectRatio="none">
+          <!-- グリッド -->
+          <g stroke="#E8E4DC" stroke-width="1">
+            <line x1="0" y1="60" x2="600" y2="60"/>
+            <line x1="0" y1="120" x2="600" y2="120"/>
+            <line x1="0" y1="180" x2="600" y2="180"/>
+          </g>
+          <!-- 過去（実線） -->
+          <polyline fill="none" stroke="#1F1E1D" stroke-width="2" points="20,180 90,160 160,140 230,120 300,100"/>
+          <!-- 未来（点線） -->
+          <polyline fill="none" stroke="#CC785C" stroke-width="2" stroke-dasharray="4 4" points="300,100 370,90 440,85 510,80 580,72"/>
+          <!-- 現在マーカー -->
+          <circle cx="300" cy="100" r="5" fill="#CC785C"/>
+          <text x="305" y="92" font-size="11" fill="#1F1E1D">現在 ¥48M</text>
+          <!-- 軸ラベル -->
+          <text x="20" y="220" font-size="10" fill="#9A968F">2020</text>
+          <text x="290" y="220" font-size="10" fill="#9A968F">2026</text>
+          <text x="555" y="220" font-size="10" fill="#9A968F">2031</text>
+        </svg>
+      </div>
+      <div class="予測-注">
+        <div class="行"><span style="color: var(--色-墨-淡);">5年後想定価格</span><strong style="font-family: var(--書体-数字);">¥51.2M</strong></div>
+        <div class="行"><span style="color: var(--色-墨-淡);">想定上昇率</span><strong style="color: var(--色-成功);">+6.7%</strong></div>
+        <div class="行"><span style="color: var(--色-墨-淡);">エリア成長率</span><strong style="color: var(--色-成功);">+8.2%</strong></div>
+        <div class="行"><span style="color: var(--色-墨-淡);">リスクスコア</span><strong>低</strong></div>
+        <div class="行"><span style="color: var(--色-墨-淡);">予測精度</span><strong>83%</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="節">
+    <div class="節-題">周辺環境</div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--余白-4);">
+      <div class="card"><div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">最寄駅</div><div style="font-weight: 500; margin-top: 4px;">中野駅 徒歩5分</div></div>
+      <div class="card"><div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">学区</div><div style="font-weight: 500; margin-top: 4px;">中野中央小学校</div></div>
+      <div class="card"><div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">スーパー</div><div style="font-weight: 500; margin-top: 4px;">350m / 2軒</div></div>
+      <div class="card"><div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">病院</div><div style="font-weight: 500; margin-top: 4px;">600m / 総合病院</div></div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

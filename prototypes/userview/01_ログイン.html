@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ — ログイン</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--色-紙-基調); }
+  .箱 {
+    width: 100%; max-width: 420px;
+    padding: var(--余白-7);
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    box-shadow: var(--影-3);
+  }
+  .印 { width: 48px; height: 48px; color: var(--色-珊瑚-本体); margin: 0 auto var(--余白-5); display: block; }
+  h1 { font-family: var(--書体-見出し); font-size: var(--文字-2XL); text-align: center; margin-bottom: var(--余白-2); }
+  .副 { text-align: center; color: var(--色-墨-淡); font-size: var(--文字-SM); margin-bottom: var(--余白-6); }
+  .欄 { margin-bottom: var(--余白-4); }
+  .欄 label { display: block; font-size: var(--文字-SM); margin-bottom: 6px; color: var(--色-墨-中); }
+  .連携 { margin-top: var(--余白-5); padding-top: var(--余白-5); border-top: 1px solid var(--色-紙-くすみ); display: flex; flex-direction: column; gap: var(--余白-3); }
+  .ssoボタン { display: flex; align-items: center; justify-content: center; gap: var(--余白-2); padding: 10px; border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); background: var(--色-紙-純白); cursor: pointer; font-size: var(--文字-SM); }
+  .ssoボタン:hover { background: var(--色-紙-くすみ); }
+  .脚 { text-align: center; color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: var(--余白-5); }
+</style>
+</head>
+<body>
+<div class="箱">
+  <svg class="印" viewBox="0 0 64 64" fill="currentColor">
+    <g transform="translate(32 32)">
+      <rect x="-2" y="-30" width="4" height="22" rx="2"/>
+      <g transform="rotate(45)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+      <g transform="rotate(90)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+      <g transform="rotate(135)"><rect x="-2" y="-30" width="4" height="22" rx="2"/></g>
+      <g transform="rotate(22.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+      <g transform="rotate(67.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+      <g transform="rotate(112.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+      <g transform="rotate(157.5)"><rect x="-1.5" y="-26" width="3" height="18" rx="1.5"/></g>
+    </g>
+  </svg>
+  <h1>アンソロウへようこそ</h1>
+  <div class="副">業務に静けさを。</div>
+
+  <div class="欄">
+    <label>メールアドレス</label>
+    <input class="入力" placeholder="you@example.com" />
+  </div>
+  <div class="欄">
+    <label>パスワード</label>
+    <input class="入力" type="password" placeholder="••••••••" />
+  </div>
+
+  <button class="btn btn-主要" style="width: 100%; padding: 12px;">ログイン</button>
+
+  <div class="連携">
+    <button class="ssoボタン">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.5c0-1-.1-1.8-.3-2.7H12v5.1h5.6c-.2 1.3-1 2.4-2.1 3.1v2.6h3.4c2-1.8 3.1-4.5 3.1-8.1z"/></svg>
+      Google アカウントでログイン
+    </button>
+    <button class="ssoボタン">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect width="11" height="11"/><rect x="13" width="11" height="11"/><rect y="13" width="11" height="11"/><rect x="13" y="13" width="11" height="11"/></svg>
+      Microsoft アカウントでログイン
+    </button>
+  </div>
+
+  <div class="脚">v0.1 ・ <a href="#">利用規約</a> ・ <a href="#">プライバシー</a></div>
+</div>
+</body>
+</html>

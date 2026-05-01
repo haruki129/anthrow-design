@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ UserView — 顧客詳細</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); letter-spacing: -0.02em; }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; display: grid; grid-template-columns: 1fr 320px; gap: 0; }
+  .中 { padding: var(--余白-6) var(--余白-7); overflow-y: auto; }
+  .右 { background: var(--色-紙-くすみ); padding: var(--余白-6) var(--余白-5); border-left: 1px solid var(--色-紙-淡墨); }
+
+  .戻る { color: var(--色-墨-淡); font-size: var(--文字-SM); display: flex; align-items: center; gap: var(--余白-2); cursor: pointer; margin-bottom: var(--余白-4); }
+  .戻る:hover { color: var(--色-墨-本体); }
+
+  .顧頭 { display: flex; align-items: center; gap: var(--余白-4); margin-bottom: var(--余白-6); }
+  .顧頭 .丸 { width: 64px; height: 64px; border-radius: var(--角-丸); background: var(--色-珊瑚-淡); color: var(--色-珊瑚-濃); display: flex; align-items: center; justify-content: center; font-family: var(--書体-見出し); font-size: var(--文字-2XL); }
+  .顧頭 .氏-本 { font-family: var(--書体-見出し); font-size: var(--文字-2XL); }
+  .顧頭 .氏-副 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: 2px; }
+
+  .情報-列 {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: var(--余白-4);
+    margin-bottom: var(--余白-6);
+  }
+  .情報-枠 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-4); }
+  .情報-名 { font-size: var(--文字-XS); color: var(--色-墨-淡); text-transform: uppercase; letter-spacing: 0.05em; }
+  .情報-値 { margin-top: var(--余白-2); font-weight: 500; font-family: var(--書体-数字); font-size: var(--文字-LG); }
+  .情報-値.文 { font-family: var(--書体-本文); font-size: var(--文字-MD); }
+
+  .時系列 { position: relative; padding-left: 28px; }
+  .時系列::before { content: ''; position: absolute; left: 8px; top: 8px; bottom: 8px; width: 2px; background: var(--色-紙-淡墨); }
+  .項目 { position: relative; padding-bottom: var(--余白-5); }
+  .項目::before {
+    content: ''; position: absolute; left: -28px; top: 6px;
+    width: 18px; height: 18px; border-radius: var(--角-丸);
+    background: var(--色-紙-純白); border: 2px solid var(--色-珊瑚-本体);
+  }
+  .項目.解::before { background: var(--色-珊瑚-本体); }
+  .項目-時 { font-size: var(--文字-XS); color: var(--色-墨-淡); }
+  .項目-題 { font-weight: 500; margin-top: 2px; }
+  .項目-本文 { color: var(--色-墨-中); font-size: var(--文字-SM); margin-top: var(--余白-2); line-height: var(--行間-広); }
+  .項目-枠 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-4); margin-top: var(--余白-2); }
+
+  .右-見出し { font-family: var(--書体-見出し); font-size: var(--文字-LG); margin-bottom: var(--余白-4); }
+  .次手 { background: var(--色-紙-純白); border: 1px solid var(--色-珊瑚-淡); border-radius: var(--角-MD); padding: var(--余白-4); margin-bottom: var(--余白-3); }
+  .次手-題 { font-weight: 500; font-size: var(--文字-SM); }
+  .次手-本 { color: var(--色-墨-中); font-size: var(--文字-XS); margin-top: 4px; line-height: var(--行間-広); }
+  .次手 button { margin-top: var(--余白-3); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>案件</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>承認</div>
+</aside>
+
+<main class="主">
+  <div class="中">
+    <div class="戻る">‹ 顧客一覧へ戻る</div>
+
+    <div class="顧頭">
+      <div class="丸">山</div>
+      <div>
+        <div class="氏-本">山田 太郎 様 <span class="tag tag-成功" style="margin-left: 8px; vertical-align: middle;">商談中</span></div>
+        <div class="氏-副">ヤマダ タロウ ・ 担当: 樋口 ・ 初回接触: 2026/02/14</div>
+      </div>
+    </div>
+
+    <div class="情報-列">
+      <div class="情報-枠">
+        <div class="情報-名">予算</div>
+        <div class="情報-値">¥48,000,000</div>
+      </div>
+      <div class="情報-枠">
+        <div class="情報-名">関心エリア</div>
+        <div class="情報-値 文">中野区 / 杉並区</div>
+      </div>
+      <div class="情報-枠">
+        <div class="情報-名">物件種別</div>
+        <div class="情報-値 文">タワーマンション</div>
+      </div>
+      <div class="情報-枠">
+        <div class="情報-名">クロージング目標</div>
+        <div class="情報-値 文">2026年6月末</div>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom: var(--余白-4);">タイムライン</h3>
+    <div class="時系列">
+      <div class="項目 解">
+        <div class="項目-時">本日 10:32 ・ 提案メール送信</div>
+        <div class="項目-題">中野駅徒歩5分 タワーマンション3物件比較資料</div>
+        <div class="項目-枠">
+          <div style="font-size: var(--文字-SM); color: var(--色-墨-中);">送信完了。価格・利回り・将来性の3軸比較カードを添付。山田様より「明日中に返答」との返信あり。</div>
+        </div>
+      </div>
+      <div class="項目">
+        <div class="項目-時">昨日 16:08 ・ 電話</div>
+        <div class="項目-題">予算上限の再確認（45M→48Mへ拡張可能と回答）</div>
+        <div class="項目-本文">奥様との相談で予算枠が拡大。ご主人の昇進が決定要因。次回提案では48M帯のプレミアム物件を主軸にすべき。</div>
+      </div>
+      <div class="項目">
+        <div class="項目-時">4/26 14:00 ・ 内見</div>
+        <div class="項目-題">中野ザ・タワー 25F 西向き</div>
+        <div class="項目-本文">眺望に強い反応。ただしリビング動線で奥様懸念。同階層の東向き物件を次回提示予定。</div>
+      </div>
+      <div class="項目">
+        <div class="項目-時">2/14 11:00 ・ 初回面談</div>
+        <div class="項目-題">来店ヒアリング</div>
+        <div class="項目-本文">ご家族構成・通勤・教育環境・将来計画をヒアリング。お子様の中学校選択が物件決定の主要因。</div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="右">
+    <div class="右-見出し">アンソロウからの提案</div>
+    <div class="次手">
+      <div class="次手-題">本日中に「東向き比較」を返信</div>
+      <div class="次手-本">奥様の動線懸念に対し、東向き2物件＋間取改装可能性を3行で。山田様の返答期限は明日中です。</div>
+      <button class="btn btn-アクセント btn-小" style="width: 100%;">下書きを作成</button>
+    </div>
+    <div class="次手">
+      <div class="次手-題">クロージング日逆算アラート</div>
+      <div class="次手-本">6月末契約のためには5月20日までに物件確定が必要。残り 50 日 — ペース緩慢の懸念。</div>
+      <button class="btn btn-線 btn-小" style="width: 100%;">逆算カレンダーを開く</button>
+    </div>
+    <div class="次手">
+      <div class="次手-題">類似成功事例</div>
+      <div class="次手-本">渡辺様（4/25契約）と属性類似度83%。決め手となった「学区説明資料」を流用候補にあげます。</div>
+      <button class="btn btn-線 btn-小" style="width: 100%;">参照資料を見る</button>
+    </div>
+  </aside>
+</main>
+
+</body>
+</html>

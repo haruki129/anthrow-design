@@ -1,0 +1,213 @@
+/* ============================================================
+   アンソロウ デザインシステム / Design Tokens v0.1
+   トーン: Anthropic Claude-style（白基調・コーラルアクセント・セリフ見出し）
+   提供レベル: インフラレベル業務SaaS
+   ============================================================ */
+
+:root {
+  /* ---------- カラー（コア） ---------- */
+  --色-紙-基調:        #FAF9F7;   /* メインBG（やわらかい白） */
+  --色-紙-純白:        #FFFFFF;   /* カード／モーダル */
+  --色-紙-くすみ:      #F2EFEA;   /* セクション区切り */
+  --色-紙-淡墨:        #E8E4DC;   /* ボーダー（弱） */
+
+  --色-墨-本体:        #1F1E1D;   /* 主要テキスト（ほぼ黒） */
+  --色-墨-中:          #44423D;   /* 副次テキスト */
+  --色-墨-淡:          #6B6863;   /* キャプション */
+  --色-墨-極淡:        #9A968F;   /* プレースホルダー */
+
+  --色-珊瑚-本体:      #CC785C;   /* Anthropic Coral / アクセント */
+  --色-珊瑚-濃:        #B86347;   /* ホバー／プレス */
+  --色-珊瑚-淡:        #F4E4DC;   /* バッジ背景 */
+  --色-珊瑚-極淡:      #FAF1EC;   /* 選択中行ハイライト */
+
+  /* ---------- カラー（機能色） ---------- */
+  --色-成功:           #4A7C59;
+  --色-成功-淡:        #E8F0EA;
+  --色-警告:           #C99A2E;
+  --色-警告-淡:        #FAF1DC;
+  --色-危険:           #B23A3A;
+  --色-危険-淡:        #F8E4E4;
+  --色-情報:           #4A6E8C;
+  --色-情報-淡:        #E4ECF2;
+
+  /* ---------- タイポグラフィ ---------- */
+  --書体-見出し:       'Tiempos Headline','Copernicus','Noto Serif JP','Hiragino Mincho ProN',serif;
+  --書体-本文:         'Styrene B','Inter','Noto Sans JP','Hiragino Kaku Gothic ProN',-apple-system,sans-serif;
+  --書体-数字:         'JetBrains Mono','SF Mono','Roboto Mono',monospace;
+
+  /* タイプスケール（Major Third 1.250） */
+  --文字-XS:   12px;
+  --文字-SM:   14px;
+  --文字-MD:   16px;
+  --文字-LG:   18px;
+  --文字-XL:   22px;
+  --文字-2XL:  28px;
+  --文字-3XL:  36px;
+  --文字-4XL:  48px;
+
+  --行間-密:    1.35;
+  --行間-標準:  1.6;
+  --行間-広:    1.8;
+
+  /* ---------- 余白（8pxグリッド） ---------- */
+  --余白-1:  4px;
+  --余白-2:  8px;
+  --余白-3:  12px;
+  --余白-4:  16px;
+  --余白-5:  24px;
+  --余白-6:  32px;
+  --余白-7:  48px;
+  --余白-8:  64px;
+  --余白-9:  96px;
+
+  /* ---------- 角丸 ---------- */
+  --角-XS:  4px;
+  --角-SM:  8px;
+  --角-MD:  12px;
+  --角-LG:  16px;
+  --角-XL:  24px;
+  --角-丸:  9999px;
+
+  /* ---------- 影（やわらかく薄く） ---------- */
+  --影-無:    none;
+  --影-1:     0 1px 2px rgba(31,30,29,0.04), 0 1px 1px rgba(31,30,29,0.03);
+  --影-2:     0 2px 6px rgba(31,30,29,0.06), 0 1px 2px rgba(31,30,29,0.04);
+  --影-3:     0 8px 24px rgba(31,30,29,0.08), 0 2px 6px rgba(31,30,29,0.04);
+  --影-モーダル: 0 20px 48px rgba(31,30,29,0.18), 0 4px 12px rgba(31,30,29,0.08);
+
+  /* ---------- レイヤー ---------- */
+  --層-基底:    0;
+  --層-内容:    10;
+  --層-浮上:    100;
+  --層-モーダル: 1000;
+  --層-通知:    2000;
+
+  /* ---------- アニメーション ---------- */
+  --速-即時:  80ms;
+  --速-標準:  180ms;
+  --速-丁寧:  280ms;
+  --緩-標準:  cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --緩-滑らか: cubic-bezier(0.4, 0.0, 0.2, 1.0);
+
+  /* ---------- レイアウト幅 ---------- */
+  --幅-内容:   1200px;
+  --幅-狭:     720px;
+  --幅-広:     1440px;
+  --幅-サイドバー: 256px;
+  --高-ヘッダー: 56px;
+}
+
+/* ---------- ベース ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--色-紙-基調);
+  color: var(--色-墨-本体);
+  font-family: var(--書体-本文);
+  font-size: var(--文字-MD);
+  line-height: var(--行間-標準);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--書体-見出し);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: var(--行間-密);
+  color: var(--色-墨-本体);
+  margin: 0;
+}
+h1 { font-size: var(--文字-3XL); }
+h2 { font-size: var(--文字-2XL); }
+h3 { font-size: var(--文字-XL); }
+h4 { font-size: var(--文字-LG); }
+
+a { color: var(--色-珊瑚-本体); text-decoration: none; }
+a:hover { color: var(--色-珊瑚-濃); }
+
+/* ---------- 共通コンポーネント ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--余白-2);
+  padding: 10px 18px;
+  font-family: var(--書体-本文);
+  font-size: var(--文字-SM);
+  font-weight: 500;
+  border-radius: var(--角-MD);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--速-標準) var(--緩-標準);
+  white-space: nowrap;
+}
+.btn-主要 {
+  background: var(--色-墨-本体);
+  color: var(--色-紙-純白);
+}
+.btn-主要:hover { background: #000; }
+.btn-アクセント {
+  background: var(--色-珊瑚-本体);
+  color: var(--色-紙-純白);
+}
+.btn-アクセント:hover { background: var(--色-珊瑚-濃); }
+.btn-線 {
+  background: transparent;
+  color: var(--色-墨-本体);
+  border-color: var(--色-紙-淡墨);
+}
+.btn-線:hover { background: var(--色-紙-くすみ); }
+.btn-小 { padding: 6px 12px; font-size: var(--文字-XS); }
+
+.card {
+  background: var(--色-紙-純白);
+  border-radius: var(--角-LG);
+  border: 1px solid var(--色-紙-淡墨);
+  box-shadow: var(--影-1);
+  padding: var(--余白-5);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: var(--文字-XS);
+  font-weight: 500;
+  border-radius: var(--角-丸);
+  background: var(--色-珊瑚-淡);
+  color: var(--色-珊瑚-濃);
+}
+.tag-成功 { background: var(--色-成功-淡); color: var(--色-成功); }
+.tag-警告 { background: var(--色-警告-淡); color: var(--色-警告); }
+.tag-危険 { background: var(--色-危険-淡); color: var(--色-危険); }
+.tag-情報 { background: var(--色-情報-淡); color: var(--色-情報); }
+
+.入力 {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: var(--書体-本文);
+  font-size: var(--文字-SM);
+  background: var(--色-紙-純白);
+  color: var(--色-墨-本体);
+  border: 1px solid var(--色-紙-淡墨);
+  border-radius: var(--角-MD);
+  transition: border-color var(--速-標準);
+}
+.入力:focus {
+  outline: none;
+  border-color: var(--色-珊瑚-本体);
+  box-shadow: 0 0 0 3px var(--色-珊瑚-極淡);
+}
+
+/* ---------- スターアイコン（クロード象徴） ---------- */
+.アンソロウ印 {
+  width: 32px; height: 32px;
+  color: var(--色-珊瑚-本体);
+  display: inline-block;
+}

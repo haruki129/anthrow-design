@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Dashboard — 承認センター</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+  .側-見出し { font-size: var(--文字-XS); color: var(--色-墨-淡); margin: var(--余白-5) 0 var(--余白-2) var(--余白-3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); }
+  .頁-上 { display: flex; justify-content: space-between; align-items: end; margin-bottom: var(--余白-6); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: 4px; }
+
+  .統計 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--余白-4); margin-bottom: var(--余白-6); }
+  .統 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); padding: var(--余白-4); }
+  .統-値 { font-family: var(--書体-数字); font-size: var(--文字-2XL); font-weight: 500; }
+  .統-名 { font-size: var(--文字-XS); color: var(--色-墨-淡); margin-top: 4px; }
+
+  .表 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); overflow: hidden; }
+  .表-行 { display: grid; grid-template-columns: 100px 2fr 1fr 1fr 100px 200px; padding: var(--余白-4) var(--余白-5); border-bottom: 1px solid var(--色-紙-くすみ); align-items: center; gap: var(--余白-3); font-size: var(--文字-SM); }
+  .表-頭 { background: var(--色-紙-くすみ); font-size: var(--文字-XS); color: var(--色-墨-淡); text-transform: uppercase; letter-spacing: 0.05em; }
+  .表-行:last-child { border: none; }
+  .金 { font-family: var(--書体-数字); }
+
+  .自動化 {
+    background: linear-gradient(135deg, var(--色-成功-淡), var(--色-紙-純白));
+    border: 1px solid var(--色-成功);
+    border-radius: var(--角-LG);
+    padding: var(--余白-5);
+    margin-top: var(--余白-6);
+  }
+  .自動化-題 { font-family: var(--書体-見出し); font-size: var(--文字-XL); margin-bottom: var(--余白-3); display: flex; align-items: center; gap: var(--余白-2); }
+  .自動化-規 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--余白-3); margin-top: var(--余白-3); }
+  .規 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-MD); padding: var(--余白-4); }
+  .規-題 { font-weight: 500; margin-bottom: 4px; }
+  .規-本 { font-size: var(--文字-XS); color: var(--色-墨-中); line-height: var(--行間-広); }
+  .切換 { width: 36px; height: 20px; background: var(--色-成功); border-radius: var(--角-丸); position: relative; cursor: pointer; }
+  .切換::after { content: ''; position: absolute; right: 2px; top: 2px; width: 16px; height: 16px; border-radius: var(--角-丸); background: var(--色-紙-純白); }
+  .切換.オフ { background: var(--色-紙-淡墨); }
+  .切換.オフ::after { left: 2px; right: auto; }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目">ダッシュボード</div>
+  <div class="側-見出し">運用</div>
+  <div class="側-項目 選択">承認センター</div>
+  <div class="側-項目">バージョン履歴</div>
+  <div class="側-項目">権限管理</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div>
+      <div class="頁-見出し">承認センター</div>
+      <div class="頁-注">変更前後の差分を確認後、保存／改善のみ選択可能（厳守原則）</div>
+    </div>
+  </div>
+
+  <div class="統計">
+    <div class="統"><div class="統-値" style="color: var(--色-警告);">14</div><div class="統-名">承認待ち</div></div>
+    <div class="統"><div class="統-値">4.2h</div><div class="統-名">平均所要時間</div></div>
+    <div class="統"><div class="統-値" style="color: var(--色-成功);">62%</div><div class="統-名">自動承認率</div></div>
+    <div class="統"><div class="統-値">98.4%</div><div class="統-名">承認成功率</div></div>
+  </div>
+
+  <div class="表">
+    <div class="表-行 表-頭">
+      <div>種別</div>
+      <div>件名</div>
+      <div>起案</div>
+      <div>金額/影響</div>
+      <div>緊急度</div>
+      <div></div>
+    </div>
+    <div class="表-行">
+      <div><span class="tag tag-警告">価格変更</span></div>
+      <div><strong>山田太郎様 値引き 5%稟議</strong><div style="color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: 2px;">¥48M → ¥45.6M</div></div>
+      <div>樋口</div>
+      <div class="金">▲ ¥2,400,000</div>
+      <div><span class="tag tag-危険">高</span></div>
+      <div style="display: flex; gap: 8px;"><button class="btn btn-線 btn-小">差分確認</button><button class="btn btn-アクセント btn-小">承認</button></div>
+    </div>
+    <div class="表-行">
+      <div><span class="tag tag-情報">AI起案</span></div>
+      <div><strong>提案テンプレートv0.2</strong><div style="color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: 2px;">将来資産価値情報を追加</div></div>
+      <div>アンソロウAI</div>
+      <div class="金">+24%成約率</div>
+      <div><span class="tag">中</span></div>
+      <div style="display: flex; gap: 8px;"><button class="btn btn-線 btn-小">差分確認</button><button class="btn btn-アクセント btn-小">承認</button></div>
+    </div>
+    <div class="表-行">
+      <div><span class="tag">権限</span></div>
+      <div><strong>新人 木下さん 顧客閲覧権限付与</strong><div style="color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: 2px;">中野支店 顧客リストへの読み取り</div></div>
+      <div>支店長 中川</div>
+      <div class="金">−</div>
+      <div><span class="tag tag-情報">低</span></div>
+      <div style="display: flex; gap: 8px;"><button class="btn btn-線 btn-小">差分確認</button><button class="btn btn-アクセント btn-小">承認</button></div>
+    </div>
+    <div class="表-行">
+      <div><span class="tag tag-危険">契約条件</span></div>
+      <div><strong>田中健一様 港区投資 ローン特約変更</strong><div style="color: var(--色-墨-淡); font-size: var(--文字-XS); margin-top: 2px;">期日 +14日延長</div></div>
+      <div>樋口</div>
+      <div class="金">¥126M案件</div>
+      <div><span class="tag tag-危険">高</span></div>
+      <div style="display: flex; gap: 8px;"><button class="btn btn-線 btn-小">差分確認</button><button class="btn btn-アクセント btn-小">承認</button></div>
+    </div>
+  </div>
+
+  <div class="自動化">
+    <div class="自動化-題">⚙ 自動承認ルール（低リスク・実行必要のものを自動化）</div>
+    <div style="font-size: var(--文字-SM); color: var(--色-墨-中); line-height: var(--行間-広);">
+      下記ルール下では人手の承認を不要化し、樋口さんは哲学的な問い・創造的判断に集中できます。
+    </div>
+    <div class="自動化-規">
+      <div class="規">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <div class="規-題">3%以下の値引き稟議</div>
+            <div class="規-本">過去6ヶ月で承認率99.2%。粗利率15%以上を維持できる範囲は自動承認。</div>
+          </div>
+          <div class="切換"></div>
+        </div>
+      </div>
+      <div class="規">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <div class="規-題">提案テンプレート微修正</div>
+            <div class="規-本">過去30日成約データに基づくAI最適化（語彙・構成の差分のみ）。</div>
+          </div>
+          <div class="切換"></div>
+        </div>
+      </div>
+      <div class="規">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <div class="規-題">同担当内の顧客タグ変更</div>
+            <div class="規-本">担当本人による自顧客のステータス・タグ更新は記録のみで通過。</div>
+          </div>
+          <div class="切換"></div>
+        </div>
+      </div>
+      <div class="規">
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+          <div>
+            <div class="規-題">5%超の値引き稟議</div>
+            <div class="規-本">高リスク案件は必ず人手承認。差分・理由・粗利を3軸で表示。</div>
+          </div>
+          <div class="切換 オフ"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Dashboard — KPIサマリー</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); letter-spacing: -0.02em; }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+  .側-見出し { font-size: var(--文字-XS); color: var(--色-墨-淡); margin: var(--余白-5) 0 var(--余白-2) var(--余白-3); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); }
+  .頁-上 { display: flex; justify-content: space-between; align-items: end; margin-bottom: var(--余白-6); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: 4px; }
+
+  .KPI格 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--余白-4); margin-bottom: var(--余白-6); }
+  .KPI {
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    padding: var(--余白-5);
+  }
+  .KPI-名 { font-size: var(--文字-XS); color: var(--色-墨-淡); text-transform: uppercase; letter-spacing: 0.05em; }
+  .KPI-値 { font-family: var(--書体-数字); font-size: var(--文字-3XL); font-weight: 500; margin-top: var(--余白-2); }
+  .KPI-差 { display: inline-flex; align-items: center; gap: 4px; margin-top: var(--余白-2); padding: 4px 10px; border-radius: var(--角-丸); font-size: var(--文字-XS); font-weight: 500; }
+  .KPI-差.+ { background: var(--色-成功-淡); color: var(--色-成功); }
+  .KPI-差.- { background: var(--色-危険-淡); color: var(--色-危険); }
+
+  .広格 { display: grid; grid-template-columns: 2fr 1fr; gap: var(--余白-5); margin-bottom: var(--余白-5); }
+  .箱 { background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG); padding: var(--余白-5); }
+  .箱-題 { font-family: var(--書体-見出し); font-size: var(--文字-XL); margin-bottom: var(--余白-4); }
+
+  .グラフ { width: 100%; height: 280px; }
+
+  .順位 { }
+  .順位 .行 { display: grid; grid-template-columns: 32px 1fr 80px; padding: var(--余白-3) 0; border-bottom: 1px solid var(--色-紙-くすみ); align-items: center; font-size: var(--文字-SM); }
+  .順位 .行:last-child { border: 0; }
+  .順位 .番 { width: 24px; height: 24px; border-radius: var(--角-丸); background: var(--色-紙-くすみ); display: flex; align-items: center; justify-content: center; font-size: var(--文字-XS); font-weight: 500; }
+  .順位 .行.今 .番 { background: var(--色-珊瑚-本体); color: var(--色-紙-純白); }
+  .順位 .金 { font-family: var(--書体-数字); text-align: right; }
+
+  .広格2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--余白-5); }
+
+  .洞察 {
+    background: linear-gradient(135deg, var(--色-珊瑚-極淡), var(--色-紙-純白));
+    border: 1px solid var(--色-珊瑚-淡);
+  }
+  .洞察 .行 { padding: var(--余白-3) 0; border-bottom: 1px dashed var(--色-紙-淡墨); font-size: var(--文字-SM); line-height: var(--行間-広); }
+  .洞察 .行:last-child { border: 0; }
+  .洞察 strong { color: var(--色-珊瑚-濃); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zM13 21h8V11h-8v10zM3 21h8v-6H3v6zM13 3v6h8V3h-8z"/></svg>ダッシュボード</div>
+  <div class="側-見出し">分析</div>
+  <div class="側-項目 選択">KPIサマリー</div>
+  <div class="側-項目">パイプライン</div>
+  <div class="側-項目">エリア別分析</div>
+  <div class="側-見出し">運用</div>
+  <div class="側-項目">承認センター</div>
+  <div class="側-項目">バージョン履歴</div>
+  <div class="側-項目">権限管理</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div>
+      <div class="頁-見出し">KPIサマリー</div>
+      <div class="頁-注">2026年4月 ・ 中野支店 ・ 全担当 12名</div>
+    </div>
+    <div style="display: flex; gap: var(--余白-3);">
+      <button class="btn btn-線">期間: 今月 ▾</button>
+      <button class="btn btn-線">CSV出力</button>
+    </div>
+  </div>
+
+  <div class="KPI格">
+    <div class="KPI">
+      <div class="KPI-名">月次成約金額</div>
+      <div class="KPI-値">¥482M</div>
+      <span class="KPI-差 +">↑ +12.4% 前月比</span>
+    </div>
+    <div class="KPI">
+      <div class="KPI-名">成約件数</div>
+      <div class="KPI-値">14件</div>
+      <span class="KPI-差 +">↑ +2件 前月比</span>
+    </div>
+    <div class="KPI">
+      <div class="KPI-名">粗利率</div>
+      <div class="KPI-値">19.2%</div>
+      <span class="KPI-差 +">↑ +0.8pt 前月比</span>
+    </div>
+    <div class="KPI">
+      <div class="KPI-名">稟議所要時間（中央値）</div>
+      <div class="KPI-値">4.2h</div>
+      <span class="KPI-差 -">↓ -0.6h 前月比</span>
+    </div>
+  </div>
+
+  <div class="広格">
+    <div class="箱">
+      <div class="箱-題">月次成約推移</div>
+      <svg class="グラフ" viewBox="0 0 800 280" preserveAspectRatio="none">
+        <g stroke="#E8E4DC" stroke-width="1">
+          <line x1="0" y1="60" x2="800" y2="60"/>
+          <line x1="0" y1="120" x2="800" y2="120"/>
+          <line x1="0" y1="180" x2="800" y2="180"/>
+          <line x1="0" y1="240" x2="800" y2="240"/>
+        </g>
+        <!-- 棒 -->
+        <g fill="#F4E4DC">
+          <rect x="40"  y="160" width="60" height="80"/>
+          <rect x="120" y="140" width="60" height="100"/>
+          <rect x="200" y="120" width="60" height="120"/>
+          <rect x="280" y="100" width="60" height="140"/>
+          <rect x="360" y="130" width="60" height="110"/>
+          <rect x="440" y="110" width="60" height="130"/>
+          <rect x="520" y="90"  width="60" height="150"/>
+          <rect x="600" y="70"  width="60" height="170"/>
+          <rect x="680" y="50"  width="60" height="190" fill="#CC785C"/>
+        </g>
+        <!-- 折れ線（粗利率） -->
+        <polyline fill="none" stroke="#1F1E1D" stroke-width="2" points="70,180 150,170 230,150 310,130 390,150 470,130 550,110 630,90 710,70"/>
+        <g fill="#1F1E1D">
+          <circle cx="70" cy="180" r="3"/><circle cx="150" cy="170" r="3"/><circle cx="230" cy="150" r="3"/><circle cx="310" cy="130" r="3"/><circle cx="390" cy="150" r="3"/><circle cx="470" cy="130" r="3"/><circle cx="550" cy="110" r="3"/><circle cx="630" cy="90" r="3"/><circle cx="710" cy="70" r="3"/>
+        </g>
+        <g font-size="10" fill="#9A968F">
+          <text x="60" y="265">8月</text><text x="140" y="265">9月</text><text x="220" y="265">10月</text><text x="300" y="265">11月</text><text x="380" y="265">12月</text><text x="460" y="265">1月</text><text x="540" y="265">2月</text><text x="620" y="265">3月</text><text x="700" y="265">4月</text>
+        </g>
+      </svg>
+      <div style="display: flex; gap: var(--余白-4); margin-top: var(--余白-3); font-size: var(--文字-XS); color: var(--色-墨-淡);">
+        <span>■ <span style="color: var(--色-珊瑚-本体);">■</span> 成約金額</span>
+        <span>━ 粗利率推移</span>
+      </div>
+    </div>
+
+    <div class="箱 順位">
+      <div class="箱-題">担当者ランキング</div>
+      <div class="行 今"><div class="番">1</div><div>樋口（あなた）</div><div class="金">¥124M</div></div>
+      <div class="行"><div class="番">2</div><div>高橋</div><div class="金">¥98M</div></div>
+      <div class="行"><div class="番">3</div><div>佐々木</div><div class="金">¥82M</div></div>
+      <div class="行"><div class="番">4</div><div>鈴木</div><div class="金">¥68M</div></div>
+      <div class="行"><div class="番">5</div><div>中島</div><div class="金">¥56M</div></div>
+      <div class="行"><div class="番">6</div><div>吉田</div><div class="金">¥42M</div></div>
+    </div>
+  </div>
+
+  <div class="広格2">
+    <div class="箱 洞察">
+      <div class="箱-題">アンソロウAI 月次洞察</div>
+      <div class="行"><strong>① 中野エリアの3LDK需要</strong> が前月比 +18%。供給不足の兆候。仕入れ強化を推奨します。</div>
+      <div class="行"><strong>② AI推薦経由の成約率</strong> が 42%（業界平均 24%）。導入から3ヶ月で AI 推薦が主要成約経路に。</div>
+      <div class="行"><strong>③ 樋口担当の予測精度</strong> が 88% に到達。「学区情報」を強調した提案テンプレートが寄与。</div>
+      <div class="行"><strong>④ 警告:</strong> 4月15日以降、伊藤様（追客必要タグ）の進捗停滞。次手の自動提案を準備しました。</div>
+    </div>
+
+    <div class="箱">
+      <div class="箱-題">エリア別需要分布</div>
+      <div style="display: flex; flex-direction: column; gap: var(--余白-3); margin-top: var(--余白-3);">
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: var(--文字-SM); margin-bottom: 4px;"><span>中野区</span><span style="font-family: var(--書体-数字);">42案件</span></div>
+          <div style="height: 8px; background: var(--色-紙-くすみ); border-radius: 4px; overflow: hidden;"><div style="width: 88%; height: 100%; background: var(--色-珊瑚-本体);"></div></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: var(--文字-SM); margin-bottom: 4px;"><span>杉並区</span><span style="font-family: var(--書体-数字);">28案件</span></div>
+          <div style="height: 8px; background: var(--色-紙-くすみ); border-radius: 4px; overflow: hidden;"><div style="width: 58%; height: 100%; background: var(--色-珊瑚-本体);"></div></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: var(--文字-SM); margin-bottom: 4px;"><span>世田谷区</span><span style="font-family: var(--書体-数字);">22案件</span></div>
+          <div style="height: 8px; background: var(--色-紙-くすみ); border-radius: 4px; overflow: hidden;"><div style="width: 46%; height: 100%; background: var(--色-珊瑚-本体);"></div></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: var(--文字-SM); margin-bottom: 4px;"><span>新宿区</span><span style="font-family: var(--書体-数字);">18案件</span></div>
+          <div style="height: 8px; background: var(--色-紙-くすみ); border-radius: 4px; overflow: hidden;"><div style="width: 38%; height: 100%; background: var(--色-珊瑚-本体);"></div></div>
+        </div>
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: var(--文字-SM); margin-bottom: 4px;"><span>港区</span><span style="font-family: var(--書体-数字);">12案件</span></div>
+          <div style="height: 8px; background: var(--色-紙-くすみ); border-radius: 4px; overflow: hidden;"><div style="width: 25%; height: 100%; background: var(--色-珊瑚-本体);"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ UserView — 顧客一覧</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); letter-spacing: -0.02em; }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); transition: background var(--速-標準); }
+  .側-項目:hover { background: var(--色-紙-くすみ); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); }
+  .頁-上 { display: flex; align-items: end; justify-content: space-between; margin-bottom: var(--余白-5); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: var(--余白-1); }
+
+  .絞込 { display: flex; gap: var(--余白-3); margin-bottom: var(--余白-5); align-items: center; }
+  .検索 {
+    flex: 1; max-width: 480px;
+    display: flex; align-items: center; gap: var(--余白-3);
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-MD);
+    padding: 8px 14px;
+  }
+  .検索 input { flex: 1; border: none; outline: none; font-family: var(--書体-本文); font-size: var(--文字-SM); background: transparent; }
+
+  .表 {
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    overflow: hidden;
+  }
+  .表-行 {
+    display: grid;
+    grid-template-columns: 56px 1.6fr 1fr 1.4fr 1fr 1.2fr 80px;
+    align-items: center;
+    padding: var(--余白-4) var(--余白-5);
+    border-bottom: 1px solid var(--色-紙-くすみ);
+    transition: background var(--速-標準);
+    cursor: pointer;
+    gap: var(--余白-3);
+  }
+  .表-行:last-child { border-bottom: none; }
+  .表-行:hover { background: var(--色-紙-基調); }
+  .表-頭 { background: var(--色-紙-くすみ); font-size: var(--文字-XS); color: var(--色-墨-淡); text-transform: uppercase; letter-spacing: 0.05em; cursor: default; }
+  .表-頭:hover { background: var(--色-紙-くすみ); }
+
+  .丸顔 { width: 40px; height: 40px; border-radius: var(--角-丸); background: var(--色-珊瑚-淡); color: var(--色-珊瑚-濃); display: flex; align-items: center; justify-content: center; font-weight: 500; }
+  .氏 { font-weight: 500; }
+  .フリガナ { font-size: var(--文字-XS); color: var(--色-墨-淡); }
+  .金額 { font-family: var(--書体-数字); font-size: var(--文字-SM); }
+
+  .表-脚 {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: var(--余白-4) var(--余白-5);
+    color: var(--色-墨-淡); font-size: var(--文字-SM);
+  }
+  .ペ { display: flex; gap: var(--余白-2); }
+  .ペ-玉 { width: 32px; height: 32px; border-radius: var(--角-MD); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .ペ-玉.今 { background: var(--色-墨-本体); color: var(--色-紙-純白); }
+  .ペ-玉:hover:not(.今) { background: var(--色-紙-くすみ); }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/><path d="M4 12l8 4 8-4"/></svg>顧客</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>案件</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>承認</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>マーケットプレス</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div>
+      <div class="頁-見出し">担当顧客</div>
+      <div class="頁-注">全 248 名 — アクティブ案件 42 件</div>
+    </div>
+    <div style="display: flex; gap: var(--余白-3);">
+      <button class="btn btn-線">CSV出力</button>
+      <button class="btn btn-アクセント">＋ 顧客追加</button>
+    </div>
+  </div>
+
+  <div class="絞込">
+    <div class="検索">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="氏名／案件名／物件名で検索" />
+    </div>
+    <button class="btn btn-線">ステータス: 全て</button>
+    <button class="btn btn-線">エリア: 全て</button>
+    <button class="btn btn-線">並び順: 最終接触</button>
+  </div>
+
+  <div class="表">
+    <div class="表-行 表-頭">
+      <div></div>
+      <div>顧客名</div>
+      <div>ステータス</div>
+      <div>関心物件</div>
+      <div>予算</div>
+      <div>最終接触</div>
+      <div></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">山</div>
+      <div><div class="氏">山田 太郎 様</div><div class="フリガナ">ヤマダ タロウ</div></div>
+      <div><span class="tag tag-成功">商談中</span></div>
+      <div>中野区 タワー</div>
+      <div class="金額">¥48,000,000</div>
+      <div>本日 10:32</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">佐</div>
+      <div><div class="氏">佐藤 美咲 様</div><div class="フリガナ">サトウ ミサキ</div></div>
+      <div><span class="tag">提案準備</span></div>
+      <div>世田谷 戸建</div>
+      <div class="金額">¥72,000,000</div>
+      <div>昨日 16:08</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">田</div>
+      <div><div class="氏">田中 健一 様</div><div class="フリガナ">タナカ ケンイチ</div></div>
+      <div><span class="tag tag-警告">承認待ち</span></div>
+      <div>港区 投資マンション</div>
+      <div class="金額">¥126,000,000</div>
+      <div>4/28 14:21</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">高</div>
+      <div><div class="氏">高橋 由紀 様</div><div class="フリガナ">タカハシ ユキ</div></div>
+      <div><span class="tag tag-情報">初回面談</span></div>
+      <div>未確定</div>
+      <div class="金額">¥35,000,000</div>
+      <div>4/27 11:45</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">渡</div>
+      <div><div class="氏">渡辺 浩二 様</div><div class="フリガナ">ワタナベ コウジ</div></div>
+      <div><span class="tag tag-成功">契約締結</span></div>
+      <div>新宿 1LDK</div>
+      <div class="金額">¥58,000,000</div>
+      <div>4/25 09:12</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-行">
+      <div class="丸顔">伊</div>
+      <div><div class="氏">伊藤 香織 様</div><div class="フリガナ">イトウ カオリ</div></div>
+      <div><span class="tag tag-危険">追客必要</span></div>
+      <div>千代田 投資</div>
+      <div class="金額">¥98,000,000</div>
+      <div>4/15 13:30</div>
+      <div style="text-align: right;"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><polyline points="9 18 15 12 9 6"/></svg></div>
+    </div>
+
+    <div class="表-脚">
+      <div>248件中 1〜6件</div>
+      <div class="ペ">
+        <div class="ペ-玉">‹</div>
+        <div class="ペ-玉 今">1</div>
+        <div class="ペ-玉">2</div>
+        <div class="ペ-玉">3</div>
+        <div class="ペ-玉">…</div>
+        <div class="ペ-玉">42</div>
+        <div class="ペ-玉">›</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

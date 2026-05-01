@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アンソロウ Marketplace — 共有ボード</title>
+<link rel="stylesheet" href="../../design-system/tokens.css">
+<style>
+  body { display: flex; min-height: 100vh; }
+  .側 { width: var(--幅-サイドバー); background: var(--色-紙-基調); border-right: 1px solid var(--色-紙-淡墨); padding: var(--余白-5); flex-shrink: 0; }
+  .側-ロゴ { font-family: var(--書体-見出し); font-size: var(--文字-2XL); margin-bottom: var(--余白-6); }
+  .側-項目 { display: flex; align-items: center; gap: var(--余白-3); padding: 10px 12px; color: var(--色-墨-中); border-radius: var(--角-MD); cursor: pointer; font-size: var(--文字-SM); }
+  .側-項目.選択 { background: var(--色-珊瑚-極淡); color: var(--色-珊瑚-濃); font-weight: 500; }
+
+  .主 { flex: 1; padding: var(--余白-6) var(--余白-7); }
+  .頁-上 { display: flex; justify-content: space-between; align-items: end; margin-bottom: var(--余白-5); }
+  .頁-見出し { font-family: var(--書体-見出し); font-size: var(--文字-3XL); }
+  .頁-注 { color: var(--色-墨-淡); font-size: var(--文字-SM); margin-top: 4px; }
+
+  .URL箱 { display: flex; align-items: center; gap: var(--余白-3); padding: var(--余白-4); background: var(--色-紙-くすみ); border-radius: var(--角-MD); margin-bottom: var(--余白-6); }
+  .URL { flex: 1; font-family: var(--書体-数字); font-size: var(--文字-SM); color: var(--色-墨-中); }
+
+  .ボード { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--余白-5); }
+  .候補 {
+    background: var(--色-紙-純白); border: 1px solid var(--色-紙-淡墨); border-radius: var(--角-LG);
+    overflow: hidden; transition: all var(--速-標準);
+  }
+  .候補.◎ { border-color: var(--色-成功); border-width: 2px; }
+  .候補.△ { opacity: 0.7; }
+
+  .候補-図 { aspect-ratio: 16/10; background: var(--色-紙-くすみ); position: relative; display: flex; align-items: center; justify-content: center; color: var(--色-墨-極淡); font-family: var(--書体-見出し); }
+  .反応 { position: absolute; top: 12px; right: 12px; padding: 4px 12px; border-radius: var(--角-丸); font-weight: 500; font-family: var(--書体-見出し); font-size: var(--文字-LG); background: var(--色-紙-純白); }
+  .反応.◎ { color: var(--色-成功); border: 2px solid var(--色-成功); }
+  .反応.○ { color: var(--色-情報); border: 2px solid var(--色-情報); }
+  .反応.△ { color: var(--色-警告); border: 2px solid var(--色-警告); }
+
+  .候補-本 { padding: var(--余白-4); }
+  .候補-題 { font-family: var(--書体-見出し); font-size: var(--文字-LG); margin-bottom: 4px; }
+  .候補-値 { font-family: var(--書体-数字); font-size: var(--文字-XL); margin: var(--余白-2) 0; }
+
+  .コメント枠 { background: var(--色-珊瑚-極淡); border-left: 3px solid var(--色-珊瑚-本体); padding: var(--余白-3); border-radius: var(--角-SM); font-size: var(--文字-SM); margin-top: var(--余白-3); line-height: var(--行間-広); }
+
+  .ログ {
+    margin-top: var(--余白-7);
+    background: var(--色-紙-純白);
+    border: 1px solid var(--色-紙-淡墨);
+    border-radius: var(--角-LG);
+    padding: var(--余白-5);
+  }
+  .ログ-題 { font-family: var(--書体-見出し); font-size: var(--文字-XL); margin-bottom: var(--余白-4); }
+  .ログ-行 { display: grid; grid-template-columns: 120px 1fr 80px; padding: var(--余白-3) 0; border-bottom: 1px solid var(--色-紙-くすみ); font-size: var(--文字-SM); }
+  .ログ-行:last-child { border: none; }
+</style>
+</head>
+<body>
+
+<aside class="側">
+  <div class="側-ロゴ">アンソロウ</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>対話</div>
+  <div class="側-項目"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4 8 4 8-4z"/></svg>顧客</div>
+  <div class="側-項目 選択"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/></svg>マーケットプレス</div>
+</aside>
+
+<main class="主">
+  <div class="頁-上">
+    <div>
+      <div class="頁-見出し">共有ボード — 山田太郎様</div>
+      <div class="頁-注">顧客側の反応がリアルタイムで反映されます。最終確認後、契約フローへ進めます。</div>
+    </div>
+    <div style="display: flex; gap: var(--余白-3);">
+      <button class="btn btn-線">PDFで保存</button>
+      <button class="btn btn-アクセント">契約フローへ</button>
+    </div>
+  </div>
+
+  <div class="URL箱">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24" style="color: var(--色-墨-淡);"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.71"/></svg>
+    <div class="URL">https://anthrow.app/share/yamada-tt-2026-04-30-7f2a9e</div>
+    <button class="btn btn-線 btn-小">URLコピー</button>
+    <button class="btn btn-線 btn-小">QR表示</button>
+  </div>
+
+  <div class="ボード">
+    <div class="候補 ◎">
+      <div class="候補-図">中野ザ・タワー<div class="反応 ◎">◎</div></div>
+      <div class="候補-本">
+        <div class="候補-題">中野ザ・タワー 25F</div>
+        <div class="候補-値">¥48,000,000</div>
+        <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">3LDK ・ 78.4㎡ ・ 東向き</div>
+        <div class="コメント枠">
+          山田様コメント (本日 11:08):「学区が決め手。妻も同意。値引きが少しでもあると最高」
+        </div>
+      </div>
+    </div>
+
+    <div class="候補">
+      <div class="候補-図">パークタワー中野<div class="反応 ○">○</div></div>
+      <div class="候補-本">
+        <div class="候補-題">パークタワー中野</div>
+        <div class="候補-値">¥46,500,000</div>
+        <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">3LDK ・ 72.1㎡ ・ 南西</div>
+        <div class="コメント枠">
+          山田様コメント:「悪くないが、面積が少し物足りない」
+        </div>
+      </div>
+    </div>
+
+    <div class="候補 △">
+      <div class="候補-図">ザ・パームス杉並<div class="反応 △">△</div></div>
+      <div class="候補-本">
+        <div class="候補-題">ザ・パームス杉並</div>
+        <div class="候補-値">¥45,800,000</div>
+        <div style="font-size: var(--文字-XS); color: var(--色-墨-淡);">3LDK ・ 74.8㎡ ・ 南</div>
+        <div class="コメント枠">
+          山田様コメント:「学区が中野中央でないため候補外」
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ログ">
+    <div class="ログ-題">アクティビティ</div>
+    <div class="ログ-行"><span style="color: var(--色-墨-淡);">本日 11:08</span><span>山田様が「中野ザ・タワー」に ◎ を付与</span><span><span class="tag tag-成功">反応</span></span></div>
+    <div class="ログ-行"><span style="color: var(--色-墨-淡);">本日 11:05</span><span>山田様がコメントを記入（3件）</span><span></span></div>
+    <div class="ログ-行"><span style="color: var(--色-墨-淡);">本日 10:58</span><span>山田様が共有ボードを開いた（滞在 7分23秒）</span><span></span></div>
+    <div class="ログ-行"><span style="color: var(--色-墨-淡);">本日 10:34</span><span>樋口が共有ボードを送付</span><span></span></div>
+  </div>
+</main>
+
+</body>
+</html>
